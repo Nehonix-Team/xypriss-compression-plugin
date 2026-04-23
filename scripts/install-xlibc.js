@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const https = require("https");
 
-const repo = "Nehonix-Team/xypriss-compression-plugin";
+const repo = "Nehonix-Team/xypriss-compression";
 const osName = process.platform;
 const archName = process.arch;
 const ext = osName === "win32" ? ".exe" : "";
@@ -81,15 +81,15 @@ function downloadBinary(url, dest) {
 }
 
 async function install() {
-//   console.log(`Installing ${binName} from GitHub Releases...`);
+  //   console.log(`Installing ${binName} from GitHub Releases...`);
   try {
     const release = await getLatestRelease();
     const asset =
       release.assets && release.assets.find((a) => a.name === binName);
     if (asset) {
-    //   console.log(
-    //     `Downloading from GitHub Releases: ${asset.browser_download_url}`,
-    //   );
+      //   console.log(
+      //     `Downloading from GitHub Releases: ${asset.browser_download_url}`,
+      //   );
       await downloadBinary(asset.browser_download_url, outPath);
       console.log(binName + " download successful!");
       return;

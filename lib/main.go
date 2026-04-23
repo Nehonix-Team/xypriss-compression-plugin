@@ -19,7 +19,7 @@ func main() {
 	var w io.WriteCloser
 
 	switch *algo {
-	case "gzip":
+	case "gzip": 
 		qw, err := gzip.NewWriterLevel(os.Stdout, *level)
 		if err != nil {
 			log.Fatalf("failed to create gzip writer: %v", err)

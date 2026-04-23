@@ -1,4 +1,4 @@
-module xypriss-compression-plugin/lib
+module xypriss-compression/lib
 
 go 1.24.4
 

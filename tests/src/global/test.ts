@@ -1,5 +1,5 @@
 import http from "http";
-import compression from "./src/index";
+import compression from "xypriss-compression";
 
 const compressor = compression({ threshold: 0 });
 

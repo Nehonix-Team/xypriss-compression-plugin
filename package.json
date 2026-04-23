@@ -35,7 +35,9 @@
     "http",
     "stream",
     "algorithm-enforcement",
-    "typescript"
+    "typescript",
+    "nehonix",
+    "xypriss-compression"
   ],
   "scripts": {
     "build": "xfpm run build:go && tsc",

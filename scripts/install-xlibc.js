@@ -43,40 +43,58 @@ function getLatestRelease() {
 
 function downloadBinary(url, dest) {
   return new Promise((resolve, reject) => {
-    const file = fs.createWriteStream(dest);
-    https
-      .get(
-        url,
-        {
-          headers: {
-            "User-Agent": "xypriss-installer",
-            Accept: "application/octet-stream",
-          },
+    // Ensure parent directory exists
+    const dir = path.dirname(dest);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    const request = https.get(
+      url,
+      {
+        headers: {
+          "User-Agent": "xypriss-installer",
+          Accept: "application/octet-stream",
         },
-        (res) => {
-          if (res.statusCode === 302 || res.statusCode === 301) {
-            downloadBinary(res.headers.location, dest)
-              .then(resolve)
-              .catch(reject);
-            return;
-          }
-          if (res.statusCode !== 200) {
-            reject(new Error(`Failed to download: ${res.statusCode}`));
-            return;
-          }
-          res.pipe(file);
-          file.on("finish", () => {
-            file.close();
+      },
+      (res) => {
+        if (res.statusCode === 302 || res.statusCode === 301) {
+          // Follow redirect
+          downloadBinary(res.headers.location, dest)
+            .then(resolve)
+            .catch(reject);
+          return;
+        }
+
+        if (res.statusCode !== 200) {
+          reject(new Error(`Failed to download: ${res.statusCode}`));
+          return;
+        }
+
+        const file = fs.createWriteStream(dest);
+        res.pipe(file);
+
+        file.on("finish", () => {
+          file.close((err) => {
+            if (err) return reject(err);
             if (osName !== "win32") {
-              fs.chmodSync(dest, 0o755);
+              try {
+                fs.chmodSync(dest, 0o755);
+              } catch (chmodErr) {
+                return reject(chmodErr);
+              }
             }
             resolve();
           });
-        },
-      )
-      .on("error", (err) => {
-        fs.unlink(dest, () => reject(err));
-      });
+        });
+
+        file.on("error", (err) => {
+          fs.unlink(dest, () => reject(err));
+        });
+      },
+    );
+
+    request.on("error", reject);
   });
 }
 

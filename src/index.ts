@@ -150,15 +150,54 @@ export function compression(options: CompressionOptions = {}) {
         return;
       }
 
-      const accept = req.headers["accept-encoding"] || "";
+      const accept = String(req.headers["accept-encoding"] || "").toLowerCase();
       let method: CompressionAlgorithm | null = null;
 
-      const acceptList = String(accept).toLowerCase();
-      if (acceptList.includes("br") && algorithms.includes("br")) method = "br";
-      else if (acceptList.includes("gzip") && algorithms.includes("gzip"))
-        method = "gzip";
-      else if (acceptList.includes("deflate") && algorithms.includes("deflate"))
-        method = "deflate";
+      // Extract client preferences with q-factors
+      const clientPrefs = accept
+        .split(",")
+        .map((part) => {
+          const [name, ...params] = part.trim().split(";");
+          let q = 1.0;
+          for (const param of params) {
+            const [key, value] = param.trim().split("=");
+            if (key === "q" && value) q = parseFloat(value);
+          }
+          return { method: name.trim(), q: isNaN(q) ? 1.0 : q };
+        })
+        .filter((p) => p.q > 0);
+
+      if (clientPrefs.length > 0) {
+        // Group by quality factor to handle tie-breaking correctly
+        const groups: Record<number, string[]> = {};
+        for (const p of clientPrefs) {
+          if (!groups[p.q]) groups[p.q] = [];
+          groups[p.q].push(p.method);
+        }
+
+        const sortedQs = Object.keys(groups)
+          .map(Number)
+          .sort((a, b) => b - a);
+
+        for (const qValue of sortedQs) {
+          const methodsForQ = groups[qValue];
+
+          // If wildcard is present at this quality level, pick the absolute best server algorithm
+          if (methodsForQ.includes("*")) {
+            if (algorithms.length > 0) {
+              method = algorithms[0];
+              break;
+            }
+          }
+
+          // Otherwise, pick the best server algorithm available at this quality level
+          const found = algorithms.find((a) => methodsForQ.includes(a));
+          if (found) {
+            method = found;
+            break;
+          }
+        }
+      }
 
       if (!method) {
         debug("no compression: no acceptable encoding");

@@ -1,6 +1,6 @@
 {
   "name": "xypriss-compression",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Advanced Go-powered compression middleware for XyPriss, delivering high-performance stream processing and security-hardened header management.",
   "author": {
     "name": "Nehonix Team",

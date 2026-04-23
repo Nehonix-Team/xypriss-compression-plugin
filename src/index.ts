@@ -12,7 +12,7 @@ import { IncomingMessage, ServerResponse } from "http";
 import { spawn } from "child_process";
 import * as path from "path";
 import bytes from "bytes";
-import compressible from "compressible";
+import compressible from "xypriss-compressible";
 import { createLogger } from "./logger";
 import vary from "xypriss-vary";
 import onHeaders from "xypriss-on-headers";
@@ -33,6 +33,22 @@ export interface CompressionOptions {
 
 const cacheControlNoTransformRegExp = /(?:^|,)\s*?no-transform\s*?(?:,|$)/;
 
+/**
+ * Default filter that determines if the response should be compressed.
+ */
+export function shouldCompress(
+  req: IncomingMessage,
+  res: ServerResponse,
+): boolean {
+  const type = res.getHeader("Content-Type");
+
+  if (!type) {
+    return false;
+  }
+
+  return compressible(String(Array.isArray(type) ? type[0] : type)) ?? false;
+}
+
 export function compression(options: CompressionOptions = {}) {
   const algorithms = options.algorithms || ["gzip", "deflate"];
   const level = options.level ?? 6;
@@ -44,15 +60,7 @@ export function compression(options: CompressionOptions = {}) {
   }
   const threshold = thresholdOpt as number;
 
-  const filter =
-    options.filter ||
-    function defaultFilter(req: IncomingMessage, res: ServerResponse) {
-      const type = res.getHeader("Content-Type");
-      if (!type) return false;
-      return (
-        compressible(String(Array.isArray(type) ? type[0] : type)) ?? false
-      );
-    };
+  const filter = options.filter || shouldCompress;
 
   return function compressionMiddleware(
     req: IncomingMessage,

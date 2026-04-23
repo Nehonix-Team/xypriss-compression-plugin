@@ -13,11 +13,11 @@ import { spawn } from "child_process";
 import * as path from "path";
 import bytes from "bytes";
 import compressible from "compressible";
-import createDebug from "debug";
+import { createLogger } from "./logger";
 import onHeaders from "on-headers";
 import vary from "vary";
 
-const debug = createDebug("xypriss:compression");
+const debug = createLogger("xypriss:compression");
 
 export type CompressionAlgorithm = "gzip" | "deflate" | "br";
 

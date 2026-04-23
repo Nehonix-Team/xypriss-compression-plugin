@@ -1,0 +1,8 @@
+{
+  "name": "xypriss-compression",
+  "version": "1.0.1",
+  "description": "High-performance cross-platform Go-based compression engine for the XyPriss framework",
+  "dependencies": {
+    
+  }
+}

@@ -1,7 +1,6 @@
-import * as fs from "fs";
-import * as path from "path";
-import * as https from "https";
-import { execSync } from "child_process";
+const fs = require("fs");
+const path = require("path");
+const https = require("https");
 
 const repo = "Nehonix-Team/xypriss-compression-plugin";
 const osName = process.platform;
@@ -17,7 +16,7 @@ if (!fs.existsSync(distDir)) {
 }
 
 function getLatestRelease() {
-  return new Promise<any>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     https
       .get(
         `https://api.github.com/repos/${repo}/releases/latest`,
@@ -42,8 +41,8 @@ function getLatestRelease() {
   });
 }
 
-function downloadBinary(url: string, dest: string) {
-  return new Promise<void>((resolve, reject) => {
+function downloadBinary(url, dest) {
+  return new Promise((resolve, reject) => {
     const file = fs.createWriteStream(dest);
     https
       .get(
@@ -56,7 +55,7 @@ function downloadBinary(url: string, dest: string) {
         },
         (res) => {
           if (res.statusCode === 302 || res.statusCode === 301) {
-            downloadBinary(res.headers.location!, dest)
+            downloadBinary(res.headers.location, dest)
               .then(resolve)
               .catch(reject);
             return;
@@ -82,36 +81,24 @@ function downloadBinary(url: string, dest: string) {
 }
 
 async function install() {
-  console.log(`Installing ${binName} from GitHub Releases...`);
+//   console.log(`Installing ${binName} from GitHub Releases...`);
   try {
     const release = await getLatestRelease();
-    const asset = release.assets?.find((a: any) => a.name === binName);
+    const asset =
+      release.assets && release.assets.find((a) => a.name === binName);
     if (asset) {
-      console.log(
-        `Downloading from GitHub Releases: ${asset.browser_download_url}`,
-      );
+    //   console.log(
+    //     `Downloading from GitHub Releases: ${asset.browser_download_url}`,
+    //   );
       await downloadBinary(asset.browser_download_url, outPath);
-      console.log("Download successful!");
+      console.log(binName + " download successful!");
       return;
     }
     console.log(`Binary ${binName} not found in latest release.`);
-  } catch (e: any) {
-    console.warn(`Could not fetch GitHub Release: ${e.message}`);
-  }
-
-  // Fallback
-  console.log("Attempting to build from source as fallback...");
-  try {
-    execSync(`go build -o "../bin/${binName}" main.go`, {
-      cwd: path.resolve(__dirname, "../lib"),
-      stdio: "inherit",
-    });
-    console.log("Built from source successfully.");
   } catch (e) {
-    console.error(
-      "Failed to build from source. Please ensure Go is installed.",
-    );
-    process.exit(1);
+    console.warn(`Could not fetch GitHub Release: ${e.message}`);
+  } finally {
+    process.exit(0);
   }
 }
 

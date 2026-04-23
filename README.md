@@ -1,8 +1,7 @@
 # XyPriss Compression Engine
 
-> [!WARNING]
-> **Internal Framework Component**
-> This architectural module is strictly developed for internal use within the core infrastructure of the XyPriss framework. While technically capable of operating as a standalone external middleware plugin in arbitrary Node.js systems, it is structurally managed and intended exclusively for XyPriss operational bounds. External deployment is at the discretion of the implementer.
+> [!NOTE]
+> **Framework Integration**: This architectural module is developed as a fundamental internal component of the XyPriss framework core. While the engine is structurally optimized for XyPriss operational parameters, it maintains full compatibility as a standalone, high-performance compression layer for any standard Node.js HTTP implementation. External deployment is supported but remains secondary to framework-level objectives.
 
 ## Architectural Overview
 

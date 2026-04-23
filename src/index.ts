@@ -14,8 +14,8 @@ import * as path from "path";
 import bytes from "bytes";
 import compressible from "compressible";
 import { createLogger } from "./logger";
-import onHeaders from "on-headers";
-import vary from "vary";
+import vary from "xypriss-vary";
+import onHeaders from "xypriss-on-headers";
 
 const debug = createLogger("xypriss:compression");
 

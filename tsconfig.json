@@ -7,8 +7,7 @@
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
-    // "rootDir": "./src",
-    "rootDirs": ["./src", "./pkgs"],
+    "rootDirs": ["./src"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -18,9 +17,10 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "on-headers": ["pkgs/on-headers/index.ts"]
+      "on-headers": ["pkgs/xypriss-on-headers/index.ts"],
+      "xypriss-vary": ["pkgs/xypriss-vary/index.ts"]
     }
   },
-  "include": ["src/**/*", "pkgs"],
+  "include": ["src/**/*", "pkgs/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }

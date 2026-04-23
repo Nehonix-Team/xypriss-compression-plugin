@@ -5,3 +5,4 @@ dist/
 .env
 release_notes.md
 release_notes.md/
+pkgs/

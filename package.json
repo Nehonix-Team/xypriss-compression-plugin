@@ -1,34 +1,27 @@
 {
+  "name": "xypriss-compression",
+  "version": "1.0.1",
+  "description": "High-performance cross-platform Go-based compression engine for the XyPriss framework",
   "author": {
     "name": "Nehonix Team",
     "url": "https://nehonix.com"
   },
-  "bugs": {
-    "url": "https://github.com/Nehonix-Team/xypriss-compression-plugin/issues"
-  },
-  "dependencies": {
-    "bytes": "^3.1.2",
-    "compressible": "^2.0.18",
-    "vary": "^1.1.2"
-  },
-  "description": "High-performance cross-platform Go-based compression engine for the XyPriss framework",
-  "devDependencies": {
-    "@types/bytes": "^3.1.4",
-    "@types/compressible": "^2.0.2",
-    "@types/node": "^20.0.0",
-    "@types/vary": "^1.1.3",
-    "typescript": "^5.3.0"
-  },
-  "engines": {
-    "node": ">= 14.0.0"
-  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist",
     "LICENSE",
     "README.md",
     "scripts"
   ],
-  "homepage": "https://github.com/Nehonix-Team/xypriss-compression-plugin#readme",
+  "engines": {
+    "node": ">= 14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nehonix-Team/xypriss-compression-plugin.git"
+  },
   "keywords": [
     "compression",
     "gzip",
@@ -43,20 +36,24 @@
     "algorithm-enforcement",
     "typescript"
   ],
-  "license": "MIT",
-  "main": "dist/index.js",
-  "name": "xypriss-compression",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Nehonix-Team/xypriss-compression-plugin.git"
-  },
   "scripts": {
-    "build:go": "bun run scripts/build-xlibc.ts",
-    "postinstall": "node scripts/install-xlibc.js",
     "build": "xfpm run build:go && tsc",
+    "build:go": "bun run scripts/build-xlibc.ts",
     "dev": "tsc --watch",
+    "postinstall": "node scripts/install-xlibc.js",
     "prepublishOnly": "xfpm run build"
   },
-  "types": "dist/index.d.ts",
-  "version": "1.0.1"
+  "dependencies": {
+    "bytes": "^3.1.2",
+    "compressible": "^2.0.18",
+    "xypriss-vary": "^1.1.3",
+    "xypriss-on-headers": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/bytes": "^3.1.4",
+    "@types/compressible": "^2.0.2",
+    "@types/node": "^20.0.0",
+    "@types/vary": "^1.1.3",
+    "typescript": "^5.3.0"
+  }
 }

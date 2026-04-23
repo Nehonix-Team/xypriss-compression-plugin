@@ -25,7 +25,7 @@ To completely circumvent the constraints of the V8 JavaScript execution environm
 
 - **Strict Algorithmic Enforcement**: Explicitly filter, restrict, and enforce compression methodologies per route and network constraint matrix without utilizing monolithic configurations.
 - **Cross-Platform Native Distribution**: Dynamically engineered via an advanced `postinstall` resolution system. The environment seamlessly identifies the execution platform (Linux, Darwin, Windows) and architecture (arm64, x64), automatically resolving the native `xlibc` executable via Content Addressable remote storage (GitHub Releases). Ensure frictionless deployments without enforcing the presence of a Golang compiler onto the destination client machine.
-- **Security Hardened Architecture**: All critical header manipulation dependencies (`xypriss-on-headers`, `xypriss-vary`) have been internalized, ported to TypeScript, and audited to eliminate third-party supply chain risks.
+- **Security Hardened Architecture**: All critical header manipulation and MIME analysis dependencies (`xypriss-on-headers`, `xypriss-vary`, `xypriss-compressible`) have been internalized, ported to TypeScript, and audited to eliminate third-party supply chain risks.
 - **Weighted Algorithm Negotiation**: Full RFC-compliant support for `Accept-Encoding` quality values (`q=0.8`). Dynamically balances client preference with server-side performance optimization.
 
 ## Installation Parameters
